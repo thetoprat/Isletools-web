@@ -10,107 +10,56 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #000000; background-image: radial-gradient(circle at top, hsl(0, 0%, 8%), #000 60%); color: #EAEAEA; }
         .modal { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 transition-opacity duration-300; }
-        .modal-content { @apply bg-gray-900 border border-gray-800 rounded-lg p-8 w-full max-w-2xl shadow-2xl; }
-        .interactive-glow {
-            position: relative;
-        }
-        .interactive-glow::before, .interactive-glow::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            border-radius: inherit;
-            opacity: var(--glow-opacity, 0);
-            transition: opacity 0.3s ease-in-out;
-        }
-        .interactive-glow::before {
-            background: radial-gradient(
-                var(--glow-size, 350px) circle at var(--mouse-x) var(--mouse-y),
-                rgba(168, 85, 247, 0.1),
-                transparent 40%
-            );
-            z-index: 1;
-        }
-        .interactive-glow::after {
-            --border-size: 1px;
-            background: conic-gradient(
-                from var(--border-angle, 0deg) at 50% 50%,
-                transparent, rgba(168, 85, 247, 0.8), transparent 20%
-            );
-            z-index: 0;
-            inset: calc(-1 * var(--border-size));
-            -webkit-mask: 
-                linear-gradient(#fff 0 0) content-box, 
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-        }
+        .details-content { @apply p-6 pt-4; }
+        .interactive-glow { position: relative; }
+        .interactive-glow::before, .interactive-glow::after { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; border-radius: inherit; opacity: var(--glow-opacity, 0); transition: opacity 0.3s ease-in-out; }
+        .interactive-glow::before { background: radial-gradient(var(--glow-size, 350px) circle at var(--mouse-x) var(--mouse-y), rgba(168, 85, 247, 0.1), transparent 40%); z-index: 1; }
+        .interactive-glow::after { --border-size: 1px; background: conic-gradient(from var(--border-angle, 0deg) at 50% 50%, transparent, rgba(168, 85, 247, 0.8), transparent 20%); z-index: 0; inset: calc(-1 * var(--border-size)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+        summary::-webkit-details-marker { display: none; }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
-
-    <!-- Header -->
-    <div class="sticky top-4 z-50 px-4">
-        <header class="interactive-glow container mx-auto bg-gray-900/60 backdrop-blur-sm border border-gray-800 rounded-full">
-            <nav class="px-4 py-2">
-                <div class="flex items-center justify-between">
-                    <div class="text-white font-bold text-xl ml-2"><a href="index.html">IsleTools</a></div>
-                    <div class="hidden md:flex items-center space-x-2 bg-gray-900/80 rounded-full p-1">
-                        <a href="index.html" class="flex items-center gap-x-2 text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium">
-                            <span class="material-icons-outlined text-base">home</span>
-                            Home
-                        </a>
-                        <a href="blog.html" class="flex items-center gap-x-2 bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium">
-                            <span class="material-icons-outlined text-base">article</span>
-                            Blog
-                        </a>
-                        <a href="bugs.html" class="flex items-center gap-x-2 text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium">
-                            <span class="material-icons-outlined text-base">bug_report</span>
-                            Bugs & Issues
-                        </a>
+<body>
+    <div class="flex flex-col min-h-screen">
+        <!-- Header -->
+        <div class="sticky top-4 z-50 px-4">
+            <header class="interactive-glow container mx-auto bg-gray-900/60 backdrop-blur-sm border border-gray-800 rounded-full">
+                <nav class="px-4 py-2">
+                    <div class="flex items-center justify-between">
+                        <div class="text-white font-bold text-xl ml-2"><a href="index.html">IsleTools</a></div>
+                        <div class="hidden md:flex items-center space-x-2 bg-gray-900/80 rounded-full p-1">
+                            <a href="index.html" class="flex items-center gap-x-2 text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium"><span class="material-icons-outlined text-base">home</span>Home</a>
+                            <a href="blog.html" class="flex items-center gap-x-2 bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium"><span class="material-icons-outlined text-base">article</span>Blog</a>
+                            <a href="bugs.html" class="flex items-center gap-x-2 text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium"><span class="material-icons-outlined text-base">bug_report</span>Bugs & Issues</a>
+                        </div>
+                        <div class="hidden md:block"><a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-gray-800 px-4 py-2 rounded-full text-sm font-medium text-white hover:bg-gray-700 transition-colors">GitHub</a></div>
+                        <div class="md:hidden"><button id="mobile-menu-button" class="text-white focus:outline-none p-2"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button></div>
                     </div>
-                    <div class="hidden md:block">
-                         <a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-gray-800 px-4 py-2 rounded-full text-sm font-medium text-white hover:bg-gray-700 transition-colors">GitHub</a>
-                    </div>
-                    <div class="md:hidden">
-                        <button id="mobile-menu-button" class="text-white focus:outline-none p-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                        </button>
-                    </div>
-                </div>
-            </nav>
-        </header>
-         <div id="mobile-menu" class="hidden md:hidden mt-2 bg-gray-900/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-4 space-y-2">
-            <a href="index.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Home</a>
-            <a href="blog.html" class="block bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Blog</a>
-            <a href="bugs.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Bugs & Issues</a>
-            <a href="https://github.com/thetoprat/isletools" target="_blank" class="block mt-2 bg-gray-800 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-700 transition text-center">GitHub</a>
+                </nav>
+            </header>
+             <div id="mobile-menu" class="hidden md:hidden mt-2 bg-gray-900/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-4 space-y-2">
+                <a href="index.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Home</a>
+                <a href="blog.html" class="block bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Blog</a>
+                <a href="bugs.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Bugs & Issues</a>
+                <a href="https://github.com/thetoprat/isletools" target="_blank" class="block mt-2 bg-gray-800 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-700 transition text-center">GitHub</a>
+            </div>
         </div>
+
+        <main class="container mx-auto px-6 py-16 flex-grow">
+            <div class="flex justify-between items-center mb-12 pt-12">
+                <h1 class="text-4xl font-bold text-white">Developer Blog</h1>
+                <button id="add-post-auth-button" class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300">New Post</button>
+            </div>
+            <div id="blog-posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <p class="text-center col-span-full text-gray-400">Loading blog posts...</p>
+            </div>
+        </main>
+
+        <footer class="border-t border-gray-900"><div class="container mx-auto px-6 py-8 text-center text-gray-500"><p>&copy; 2024 IsleTools. All Rights Reserved.</p></div></footer>
     </div>
 
-    <main class="container mx-auto px-6 py-16 flex-grow">
-        <div class="flex justify-between items-center mb-12 pt-12">
-            <h1 class="text-4xl font-bold text-white">Developer Blog</h1>
-            <button id="add-post-auth-button" class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300">New Post</button>
-        </div>
-        <div id="blog-posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <p class="text-center col-span-full text-gray-400">Loading blog posts...</p>
-        </div>
-    </main>
-
-
-    <footer class="border-t border-gray-900">
-        <div class="container mx-auto px-6 py-8 text-center text-gray-500">
-            <p>&copy; 2024 IsleTools. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Blog Post Modal -->
-    <div id="blog-post-modal" class="modal hidden opacity-0">
-        <div class="modal-content">
+    <!-- Create Post Modal -->
+    <div id="create-post-modal" class="modal hidden opacity-0">
+        <div class="bg-gray-900 border border-gray-800 rounded-lg p-8 w-full max-w-2xl shadow-2xl">
             <h3 class="text-2xl font-bold text-white mb-6">Create New Blog Post</h3>
             <form id="blog-post-form">
                 <div class="mb-4">
@@ -122,7 +71,7 @@
                     <textarea id="post-content" rows="8" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none" required></textarea>
                 </div>
                 <div class="flex justify-end gap-4">
-                    <button type="button" id="cancel-post-button" class="bg-transparent border border-gray-800 text-gray-300 font-semibold py-2 px-5 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300">Cancel</button>
+                    <button type="button" id="cancel-create-button" class="bg-transparent border border-gray-800 text-gray-300 font-semibold py-2 px-5 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300">Cancel</button>
                     <button type="submit" class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300">Publish Post</button>
                 </div>
             </form>
@@ -134,41 +83,30 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const BLOG_POST_PASSWORD = "admin";
+        const BLOG_POST_PASSWORD = "admin"; // This is your simple password
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        let db, auth, blogPostsCollection;
+        const createModal = document.getElementById('create-post-modal');
 
         function setupGlowEffect() {
-            const interactiveElements = document.querySelectorAll('.interactive-glow');
-            interactiveElements.forEach(elem => {
+            document.querySelectorAll('.interactive-glow').forEach(elem => {
                 const rect = elem.getBoundingClientRect();
                 elem.style.setProperty('--glow-size', `${Math.max(rect.width, rect.height) * 1.5}px`);
-
-                elem.addEventListener('mousemove', (e) => {
+                elem.addEventListener('mousemove', e => {
                     const rect = elem.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
-
+                    const x = e.clientX - rect.left, y = e.clientY - rect.top;
+                    const angle = Math.atan2(y - rect.height / 2, x - rect.width / 2) * (180 / Math.PI);
                     elem.style.setProperty('--mouse-x', `${x}px`);
                     elem.style.setProperty('--mouse-y', `${y}px`);
                     elem.style.setProperty('--border-angle', `${angle}deg`);
                 });
-
-                elem.addEventListener('mouseenter', () => {
-                    elem.style.setProperty('--glow-opacity', 1);
-                });
-
-                elem.addEventListener('mouseleave', () => {
-                    elem.style.setProperty('--glow-opacity', 0);
-                });
+                elem.addEventListener('mouseenter', () => elem.style.setProperty('--glow-opacity', 1));
+                elem.addEventListener('mouseleave', () => elem.style.setProperty('--glow-opacity', 0));
             });
         }
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        let db, auth, blogPostsCollection;
 
         try {
             const app = initializeApp(firebaseConfig);
@@ -195,26 +133,30 @@
             const q = query(blogPostsCollection, orderBy("createdAt", "desc"));
 
             onSnapshot(q, (snapshot) => {
+                container.innerHTML = '';
                 if (snapshot.empty) {
                     container.innerHTML = '<p class="text-center col-span-full text-gray-400">No blog posts yet. Be the first to write one!</p>';
                     return;
                 }
-                container.innerHTML = '';
+                
                 snapshot.forEach(doc => {
                     const post = doc.data();
-                    const postEl = document.createElement('div');
-                    postEl.className = "interactive-glow bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:border-gray-700 transition-all duration-300";
+                    const detailsEl = document.createElement('details');
+                    detailsEl.className = "interactive-glow block bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:border-gray-700 transition-all duration-300 cursor-pointer";
+                    
                     const postDate = post.createdAt ? new Date(post.createdAt.toMillis()).toLocaleDateString() : 'Just now';
-                    const contentHtml = post.content.replace(/\n/g, '<br>');
-
-                    postEl.innerHTML = `
-                        <div class="p-6">
+                    
+                    detailsEl.innerHTML = `
+                        <summary class="p-6 list-none">
                             <p class="text-sm text-gray-400 mb-2">${postDate}</p>
-                            <h3 class="font-bold text-xl text-white mb-3">${post.title}</h3>
-                            <p class="text-gray-300 line-clamp-3">${contentHtml}</p>
+                            <h3 class="font-bold text-xl text-white truncate">${post.title}</h3>
+                            <p class="text-gray-300 line-clamp-2 mt-3">${post.content}</p>
+                        </summary>
+                        <div class="details-content border-t border-gray-800">
+                            <p class="text-gray-300 leading-relaxed">${post.content.replace(/\n/g, '<br>')}</p>
                         </div>
                     `;
-                    container.appendChild(postEl);
+                    container.appendChild(detailsEl);
                 });
                 setupGlowEffect();
             }, (error) => {
@@ -223,41 +165,33 @@
             });
         }
         
-        const modal = document.getElementById('blog-post-modal');
-        const authButton = document.getElementById('add-post-auth-button');
-        const cancelButton = document.getElementById('cancel-post-button');
-        const form = document.getElementById('blog-post-form');
-
-        authButton.addEventListener('click', () => {
+        document.getElementById('add-post-auth-button').addEventListener('click', () => {
             const password = prompt("Please enter the password to create a new post:");
             if (password === BLOG_POST_PASSWORD) {
-                modal.classList.remove('hidden');
-                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                createModal.classList.remove('hidden');
+                setTimeout(() => createModal.classList.remove('opacity-0'), 10);
             } else if (password) {
+                // Use a custom styled alert or modal in a real app
                 alert("Incorrect password.");
             }
         });
 
-        const closeModal = () => {
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
+        const closeCreateModal = () => {
+            createModal.classList.add('opacity-0');
+            setTimeout(() => createModal.classList.add('hidden'), 300);
         };
 
-        cancelButton.addEventListener('click', closeModal);
+        document.getElementById('cancel-create-button').addEventListener('click', closeCreateModal);
         
-        form.addEventListener('submit', async (e) => {
+        document.getElementById('blog-post-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('post-title').value;
             const content = document.getElementById('post-content').value;
 
             try {
-                await addDoc(blogPostsCollection, {
-                    title: title,
-                    content: content,
-                    createdAt: serverTimestamp()
-                });
-                form.reset();
-                closeModal();
+                await addDoc(blogPostsCollection, { title, content, createdAt: serverTimestamp() });
+                e.target.reset();
+                closeCreateModal();
             } catch (error) {
                 console.error("Error adding document: ", error);
                 alert("Failed to publish post. See console for details.");
