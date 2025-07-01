@@ -10,10 +10,14 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #000000;
+            background-image: radial-gradient(circle at top, hsl(214, 20%, 12%), #000 60%);
             color: #EAEAEA;
         }
         .nav-link {
-            @apply text-gray-400 hover:text-white transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium;
+            @apply text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium;
+        }
+        .nav-active {
+            @apply bg-gray-800 text-white;
         }
         .gradient-text {
             background: -webkit-linear-gradient(45deg, #A855F7, #EC4899);
@@ -21,10 +25,10 @@
             -webkit-text-fill-color: transparent;
         }
         .btn-primary { 
-            @apply bg-white text-black font-bold py-3 px-6 rounded-lg hover:bg-gray-200 transition-all duration-300 shadow-lg;
+            @apply bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300 shadow-lg;
         }
         .btn-secondary { 
-            @apply bg-transparent border border-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-900 transition-all duration-300 shadow-lg;
+            @apply bg-transparent border border-gray-800 text-gray-300 font-semibold py-2 px-5 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 shadow-lg;
         }
         .section-container {
             border-top: 1px solid #222;
@@ -34,42 +38,46 @@
 <body>
 
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-sm border-b border-gray-900">
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="text-white font-bold text-xl"><a href="index.html">IsleTools</a></div>
-                <div class="hidden md:flex items-center space-x-1">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="blog.html" class="nav-link">Blog</a>
-                    <a href="bugs.html" class="nav-link">Bugs & Issues</a>
-                    <a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-gray-900 ml-4 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-800 transition">GitHub</a>
+    <div class="sticky top-4 z-50 px-4">
+        <header class="container mx-auto bg-gray-900/60 backdrop-blur-sm border border-gray-800 rounded-full">
+            <nav class="px-4 py-2">
+                <div class="flex items-center justify-between">
+                    <div class="text-white font-bold text-xl ml-2"><a href="index.html">IsleTools</a></div>
+                    <div class="hidden md:flex items-center space-x-2 bg-gray-900/80 border border-gray-700 rounded-full p-1">
+                        <a href="index.html" class="nav-link nav-active">Home</a>
+                        <a href="blog.html" class="nav-link">Blog</a>
+                        <a href="bugs.html" class="nav-link">Bugs & Issues</a>
+                    </div>
+                    <div class="hidden md:block">
+                         <a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-gray-800 px-4 py-2 rounded-full text-sm font-medium text-white hover:bg-gray-700 transition-colors">GitHub</a>
+                    </div>
+                    <div class="md:hidden">
+                        <button id="mobile-menu-button" class="text-white focus:outline-none p-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                        </button>
+                    </div>
                 </div>
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-white focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </div>
-            </div>
-            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
-                <a href="index.html" class="block nav-link text-center">Home</a>
-                <a href="blog.html" class="block nav-link text-center">Blog</a>
-                <a href="bugs.html" class="block nav-link text-center">Bugs & Issues</a>
-                <a href="https://github.com/thetoprat/isletools" target="_blank" class="block mt-2 bg-gray-900 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-800 transition text-center">GitHub</a>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
+         <div id="mobile-menu" class="hidden md:hidden mt-2 bg-gray-900/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-4 space-y-2">
+            <a href="index.html" class="block nav-link nav-active text-center">Home</a>
+            <a href="blog.html" class="block nav-link text-center">Blog</a>
+            <a href="bugs.html" class="block nav-link text-center">Bugs & Issues</a>
+            <a href="https://github.com/thetoprat/isletools" target="_blank" class="block mt-2 bg-gray-800 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-700 transition text-center">GitHub</a>
+        </div>
+    </div>
 
-    <main class="container mx-auto px-6">
+    <main class="container mx-auto px-6 -mt-16">
         <!-- Hero Section -->
-        <section id="home" class="text-center py-24 md:py-32">
+        <section id="home" class="text-center pt-40 pb-24 md:pt-48 md:pb-32">
             <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6">
-                The Ultimate <span class="gradient-text">tool</span><br> for The Isle.
+                The Ultimate&nbsp;<span class="gradient-text">Tool</span><br>for The Isle.
             </h1>
-            <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-10">
-                IsleTools provides everything you need to develop, manage, and deploy with unparalleled speed and efficiency.
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+                IsleTools adds a super visual RCON Client, .sav file editor, and more in the future.
             </p>
-            <div class="flex justify-center space-x-4">
-                <a href="#releases" class="btn-primary">Download Latest</a>
+            <div class="flex justify-center items-center space-x-4">
+                <a href="https://github.com/thetoprat/isletools/releases/latest" target="_blank" class="btn-primary">Download Latest</a>
                 <a href="https://github.com/thetoprat/isletools" target="_blank" class="btn-secondary">View on GitHub</a>
             </div>
         </section>
@@ -134,13 +142,6 @@
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
-            });
-
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-                });
             });
 
             fetchLatestRelease();
