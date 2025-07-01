@@ -3,27 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IsleTools - Official Page</title>
+    <title>Bugs & Issues - IsleTools</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000000;
-            background-image: radial-gradient(circle at top, hsl(0, 0%, 8%), #000 60%);
-            color: #EAEAEA;
-        }
-        .gradient-text {
-            background: -webkit-linear-gradient(45deg, #A855F7, #EC4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .section-container {
-            border-top: 1px solid #222;
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #000000; 
+            background-image: radial-gradient(circle at top, hsl(0, 0%, 8%), #000 60%); 
+            color: #EAEAEA; 
         }
     </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
 
     <!-- Header -->
     <div class="sticky top-4 z-50 px-4">
@@ -31,10 +24,19 @@
             <nav class="px-4 py-2">
                 <div class="flex items-center justify-between">
                     <div class="text-white font-bold text-xl ml-2"><a href="index.html">IsleTools</a></div>
-                    <div class="hidden md:flex items-center space-x-2 bg-gray-900/80 border border-gray-700 rounded-full p-1">
-                        <a href="index.html" class="bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium">Home</a>
-                        <a href="blog.html" class="text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium">Blog</a>
-                        <a href="bugs.html" class="text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium">Bugs & Issues</a>
+                    <div class="hidden md:flex items-center space-x-2 bg-gray-900/80 rounded-full p-1">
+                        <a href="index.html" class="flex items-center gap-x-2 text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium">
+                            <span class="material-icons-outlined text-base">home</span>
+                            Home
+                        </a>
+                        <a href="blog.html" class="flex items-center gap-x-2 text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium">
+                            <span class="material-icons-outlined text-base">article</span>
+                            Blog
+                        </a>
+                        <a href="bugs.html" class="flex items-center gap-x-2 bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium">
+                            <span class="material-icons-outlined text-base">bug_report</span>
+                            Bugs & Issues
+                        </a>
                     </div>
                     <div class="hidden md:block">
                          <a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-gray-800 px-4 py-2 rounded-full text-sm font-medium text-white hover:bg-gray-700 transition-colors">GitHub</a>
@@ -48,91 +50,92 @@
             </nav>
         </header>
          <div id="mobile-menu" class="hidden md:hidden mt-2 bg-gray-900/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-4 space-y-2">
-            <a href="index.html" class="block bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium text-center">Home</a>
-            <a href="blog.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium text-center">Blog</a>
-            <a href="bugs.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium text-center">Bugs & Issues</a>
+            <a href="index.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Home</a>
+            <a href="blog.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Blog</a>
+            <a href="bugs.html" class="block bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-full text-sm font-medium text-center">Bugs & Issues</a>
             <a href="https://github.com/thetoprat/isletools" target="_blank" class="block mt-2 bg-gray-800 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-700 transition text-center">GitHub</a>
         </div>
     </div>
 
-    <main class="container mx-auto px-6 -mt-16">
-        <!-- Hero Section -->
-        <section id="home" class="text-center pt-40 pb-24 md:pt-48 md:pb-32">
-            <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6">
-                The Ultimate&nbsp;<span class="gradient-text">Tool</span><br>for The Isle.
-            </h1>
-            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-                IsleTools adds a super visual RCON Client, .sav file editor, and more in the future.
-            </p>
-            <div class="flex justify-center items-center space-x-4">
-                <a href="https://github.com/thetoprat/isletools/releases/latest" target="_blank" class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300 shadow-lg">Download Latest</a>
-                <a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-transparent border border-gray-800 text-gray-300 font-semibold py-2 px-5 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 shadow-lg">View on GitHub</a>
-            </div>
-        </section>
-
-        <!-- Releases Section -->
-        <section id="releases" class="py-20 section-container">
-            <h2 class="text-4xl font-bold text-center mb-12 text-white">Latest Release</h2>
-            <div id="release-info" class="bg-gray-900/50 border border-gray-800 rounded-xl max-w-4xl mx-auto p-8 shadow-2xl">
-                <p class="text-center">Loading latest release...</p>
-            </div>
-        </section>
+    <main class="container mx-auto px-6 py-16 flex-grow">
+        <div class="text-center mb-12 pt-12">
+            <h1 class="text-4xl font-bold text-white">Bugs & Issues</h1>
+            <p class="text-gray-400 mt-2">A live look at open issues from the GitHub repository.</p>
+        </div>
+        <div id="issues-container" class="max-w-4xl mx-auto space-y-4">
+            <p class="text-center text-gray-400">Loading issues...</p>
+        </div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-900 mt-20">
+    <footer class="border-t border-gray-900">
         <div class="container mx-auto px-6 py-8 text-center text-gray-500">
             <p>&copy; 2024 IsleTools. All Rights Reserved.</p>
-            <p class="mt-2">View on <a href="https://github.com/thetoprat/isletools" class="text-gray-300 hover:underline">GitHub</a></p>
         </div>
     </footer>
 
-    <script type="module">
+    <script>
         const GITHUB_REPO = "thetoprat/isletools";
 
-        async function fetchLatestRelease() {
-            const releaseInfoContainer = document.getElementById('release-info');
+        async function fetchIssues() {
+            const issuesContainer = document.getElementById('issues-container');
             try {
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`);
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/issues?state=open`);
                 if (!response.ok) throw new Error(`GitHub API error: ${response.statusText}`);
-                const release = await response.json();
+                const issues = await response.json();
 
-                const releaseNotes = release.body 
-                    ? release.body
-                        .replace(/\r\n/g, '<br>')
-                        .replace(/### (.*)/g, '<h4 class="font-bold text-lg mt-4 text-white">$1</h4>')
-                        .replace(/\* (.*)/g, '<li class="ml-4">$1</li>')
-                    : 'No description provided for this release.';
+                if (issues.length === 0) {
+                    issuesContainer.innerHTML = '<p class="text-center text-gray-400">No open issues found. Great job!</p>';
+                    return;
+                }
 
-                releaseInfoContainer.innerHTML = `
-                    <div class="md:flex items-center">
-                        <div class="md:w-1/3 text-center md:text-left mb-6 md:mb-0">
-                            <h3 class="text-4xl font-bold text-white">${release.tag_name}</h3>
-                            <p class="text-gray-400">Released on ${new Date(release.published_at).toLocaleDateString()}</p>
+                issuesContainer.innerHTML = ''; // Clear loading message
+                issues.forEach(issue => {
+                    if (issue.pull_request) return; // Filter out pull requests
+
+                    const issueEl = document.createElement('a');
+                    issueEl.href = issue.html_url;
+                    issueEl.target = '_blank';
+                    issueEl.className = 'block bg-gray-900/50 border border-gray-800 rounded-lg p-5 hover:border-gray-700 transition-colors duration-300';
+                    
+                    let labelsHTML = '';
+                    issue.labels.forEach(label => {
+                        labelsHTML += `<span class="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded" style="background-color:#${label.color}; color:${getContrastYIQ(label.color)}">${label.name}</span>`;
+                    });
+
+                    issueEl.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-lg font-bold text-white mb-2 pr-4">${issue.title}</h3>
+                            <span class="text-gray-400 text-sm whitespace-nowrap">#${issue.number}</span>
                         </div>
-                        <div class="md:w-2/3 md:pl-8">
-                            <h4 class="font-bold text-xl text-white mb-2">What's New:</h4>
-                            <div class="text-gray-300 space-y-2">${releaseNotes}</div>
-                            <div class="mt-6 text-center md:text-left">
-                                <a href="${release.html_url}" target="_blank" class="bg-white text-black font-semibold py-2 px-4 rounded-full hover:bg-gray-200 transition-all duration-300 shadow-lg inline-block">View Release on GitHub</a>
-                            </div>
+                        <div class="flex items-center text-sm text-gray-400">
+                            <span>Opened by ${issue.user.login} on ${new Date(issue.created_at).toLocaleDateString()}</span>
                         </div>
-                    </div>
-                `;
+                        <div class="mt-3">${labelsHTML}</div>
+                    `;
+                    issuesContainer.appendChild(issueEl);
+                });
+
             } catch (error) {
-                console.error("Failed to fetch release:", error);
-                releaseInfoContainer.innerHTML = `<p class="text-red-400 text-center">Could not load latest release data.</p>`;
+                console.error("Failed to fetch issues:", error);
+                issuesContainer.innerHTML = `<p class="text-red-400 text-center">Could not load issues data.</p>`;
             }
+        }
+        
+        function getContrastYIQ(hexcolor){
+            hexcolor = hexcolor.replace("#", "");
+            const r = parseInt(hexcolor.substr(0,2),16);
+            const g = parseInt(hexcolor.substr(2,2),16);
+            const b = parseInt(hexcolor.substr(4,2),16);
+            const yiq = ((r*299)+(g*587)+(b*114))/1000;
+            return (yiq >= 128) ? 'black' : 'white';
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
+             document.getElementById('mobile-menu-button').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
             });
-
-            fetchLatestRelease();
+            fetchIssues();
         });
     </script>
 </body>
