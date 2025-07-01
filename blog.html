@@ -5,17 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - IsleTools</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #000000; background-image: radial-gradient(circle at top, hsl(0, 0%, 8%), #000 60%); color: #EAEAEA; }
-        .modal { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 transition-opacity duration-300; }
         .details-content { @apply p-6 pt-4; }
         .interactive-glow { position: relative; }
         .interactive-glow::before, .interactive-glow::after { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; border-radius: inherit; opacity: var(--glow-opacity, 0); transition: opacity 0.3s ease-in-out; }
         .interactive-glow::before { background: radial-gradient(var(--glow-size, 350px) circle at var(--mouse-x) var(--mouse-y), rgba(168, 85, 247, 0.1), transparent 40%); z-index: 1; }
         .interactive-glow::after { --border-size: 1px; background: conic-gradient(from var(--border-angle, 0deg) at 50% 50%, transparent, rgba(168, 85, 247, 0.8), transparent 20%); z-index: 0; inset: calc(-1 * var(--border-size)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
         summary::-webkit-details-marker { display: none; }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            position: relative;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border: 1px solid #374151;
+            border-radius: 1rem;
+            max-width: 4xl;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+        
+        /* Markdown Content Styles */
+        .markdown-content h1, .markdown-content h2, .markdown-content h3, .markdown-content h4, .markdown-content h5, .markdown-content h6 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .markdown-content h1 { font-size: 2rem; }
+        .markdown-content h2 { font-size: 1.5rem; }
+        .markdown-content h3 { font-size: 1.25rem; }
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #d1d5db;
+        }
+        .markdown-content code {
+            background: #374151;
+            color: #a78bfa;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+        .markdown-content pre {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+            color: #e5e7eb;
+        }
+        .markdown-content ul, .markdown-content ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            color: #d1d5db;
+        }
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+        }
+        .markdown-content blockquote {
+            border-left: 4px solid #a78bfa;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            color: #9ca3af;
+        }
+        .markdown-content a {
+            color: #a78bfa;
+            text-decoration: underline;
+        }
+        .markdown-content a:hover {
+            color: #c4b5fd;
+        }
     </style>
 </head>
 <body>
@@ -45,164 +136,170 @@
         </div>
 
         <main class="container mx-auto px-6 py-16 flex-grow">
-            <div class="flex justify-between items-center mb-12 pt-12">
+            <div class="text-center mb-12 pt-12">
                 <h1 class="text-4xl font-bold text-white">Developer Blog</h1>
-                <button id="add-post-auth-button" class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300">New Post</button>
+                <p class="text-gray-400 mt-2">Insights, tutorials, and updates from the IsleTools team.</p>
             </div>
             <div id="blog-posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <p class="text-center col-span-full text-gray-400">Loading blog posts...</p>
+                <!-- Blog posts will be rendered here by JavaScript -->
             </div>
         </main>
 
         <footer class="border-t border-gray-900"><div class="container mx-auto px-6 py-8 text-center text-gray-500"><p>&copy; 2024 IsleTools. All Rights Reserved.</p></div></footer>
     </div>
 
-    <!-- Create Post Modal -->
-    <div id="create-post-modal" class="modal hidden opacity-0">
-        <div class="bg-gray-900 border border-gray-800 rounded-lg p-8 w-full max-w-2xl shadow-2xl">
-            <h3 class="text-2xl font-bold text-white mb-6">Create New Blog Post</h3>
-            <form id="blog-post-form">
-                <div class="mb-4">
-                    <label for="post-title" class="block text-gray-300 mb-2">Title</label>
-                    <input type="text" id="post-title" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none" required>
+    <!-- Modal -->
+    <div id="blog-modal" class="modal-overlay">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content w-full max-w-4xl">
+                <div class="flex items-center justify-between p-6 border-b border-gray-700">
+                    <div>
+                        <h2 id="modal-title" class="text-2xl font-bold text-white"></h2>
+                        <p id="modal-date" class="text-sm text-gray-400 mt-1"></p>
+                    </div>
+                    <button id="close-modal" class="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+                        <span class="material-icons-outlined">close</span>
+                    </button>
                 </div>
-                <div class="mb-6">
-                    <label for="post-content" class="block text-gray-300 mb-2">Content</label>
-                    <textarea id="post-content" rows="8" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none" required></textarea>
+                <div id="modal-content" class="p-6 markdown-content">
                 </div>
-                <div class="flex justify-end gap-4">
-                    <button type="button" id="cancel-create-button" class="bg-transparent border border-gray-800 text-gray-300 font-semibold py-2 px-5 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300">Cancel</button>
-                    <button type="submit" class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300">Publish Post</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- BLOG POSTS ---
+            const blogPosts = [
+                {
+                    date: "July 1, 2025",
+                    title: "Welcome to the New IsleTools Blog!",
+                    content: `# Welcome to IsleTools Blog! 🎉
 
-        const BLOG_POST_PASSWORD = "admin"; // This is your simple password
+This is the very first post on our **brand new blog**. We're excited to share updates, tutorials, and user guides with our growing community.
 
-        const createModal = document.getElementById('create-post-modal');
+## What to Expect
 
-        function setupGlowEffect() {
-            document.querySelectorAll('.interactive-glow').forEach(elem => {
-                const rect = elem.getBoundingClientRect();
-                elem.style.setProperty('--glow-size', `${Math.max(rect.width, rect.height) * 1.5}px`);
-                elem.addEventListener('mousemove', e => {
+- **Feature Updates**: Latest tools and improvements
+- **User Guides**: Step-by-step tutorials for all IsleTools features
+- **Tips & Tricks**: Pro tips to get the most out of your server management
+
+> Stay tuned for helpful content to enhance your server administration experience!
+
+### Getting Started
+
+If you're new to IsleTools, here are some quick links:
+
+- [Home Page](index.html) - Discover all our tools
+- [GitHub Repository](https://github.com/thetoprat/isletools) - View the project
+- [Bug Reports](bugs.html) - Report issues or request features
+
+---
+
+*Thank you for being part of our community!*`
+                }
+            ];
+
+            function setupGlowEffect() {
+                document.querySelectorAll('.interactive-glow').forEach(elem => {
                     const rect = elem.getBoundingClientRect();
-                    const x = e.clientX - rect.left, y = e.clientY - rect.top;
-                    const angle = Math.atan2(y - rect.height / 2, x - rect.width / 2) * (180 / Math.PI);
-                    elem.style.setProperty('--mouse-x', `${x}px`);
-                    elem.style.setProperty('--mouse-y', `${y}px`);
-                    elem.style.setProperty('--border-angle', `${angle}deg`);
+                    elem.style.setProperty('--glow-size', `${Math.max(rect.width, rect.height) * 1.5}px`);
+                    elem.addEventListener('mousemove', e => {
+                        const rect = elem.getBoundingClientRect();
+                        const x = e.clientX - rect.left, y = e.clientY - rect.top;
+                        const angle = Math.atan2(y - rect.height / 2, x - rect.width / 2) * (180 / Math.PI);
+                        elem.style.setProperty('--mouse-x', `${x}px`);
+                        elem.style.setProperty('--mouse-y', `${y}px`);
+                        elem.style.setProperty('--border-angle', `${angle}deg`);
+                    });
+                    elem.addEventListener('mouseenter', () => elem.style.setProperty('--glow-opacity', 1));
+                    elem.addEventListener('mouseleave', () => elem.style.setProperty('--glow-opacity', 0));
                 });
-                elem.addEventListener('mouseenter', () => elem.style.setProperty('--glow-opacity', 1));
-                elem.addEventListener('mouseleave', () => elem.style.setProperty('--glow-opacity', 0));
-            });
-        }
-
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        let db, auth, blogPostsCollection;
-
-        try {
-            const app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            blogPostsCollection = collection(db, `/artifacts/${appId}/public/data/blogPosts`);
-        } catch (e) {
-            console.error("Firebase initialization failed:", e);
-            document.getElementById('blog-posts-container').innerHTML = `<p class="text-center col-span-full text-red-400">Could not connect to the blog service.</p>`;
-        }
-        
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                listenForBlogPosts();
-            } else {
-                const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                const promise = token ? signInWithCustomToken(auth, token) : signInAnonymously(auth);
-                promise.catch(error => console.error("Sign-in failed:", error));
             }
-        });
 
-        function listenForBlogPosts() {
-            const container = document.getElementById('blog-posts-container');
-            const q = query(blogPostsCollection, orderBy("createdAt", "desc"));
+            function openModal(post) {
+                const modal = document.getElementById('blog-modal');
+                const modalTitle = document.getElementById('modal-title');
+                const modalDate = document.getElementById('modal-date');
+                const modalContent = document.getElementById('modal-content');
+                
+                modalTitle.textContent = post.title;
+                modalDate.textContent = post.date;
+                modalContent.innerHTML = marked.parse(post.content);
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
 
-            onSnapshot(q, (snapshot) => {
-                container.innerHTML = '';
-                if (snapshot.empty) {
-                    container.innerHTML = '<p class="text-center col-span-full text-gray-400">No blog posts yet. Be the first to write one!</p>';
+            function closeModal() {
+                const modal = document.getElementById('blog-modal');
+                modal.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+
+            function renderBlogPosts() {
+                const container = document.getElementById('blog-posts-container');
+                if (!blogPosts || blogPosts.length === 0) {
+                    container.innerHTML = '<p class="text-center col-span-full text-gray-400">No blog posts yet.</p>';
                     return;
                 }
                 
-                snapshot.forEach(doc => {
-                    const post = doc.data();
-                    const detailsEl = document.createElement('details');
-                    detailsEl.className = "interactive-glow block bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:border-gray-700 transition-all duration-300 cursor-pointer";
+                container.innerHTML = ''; // Clear existing content
+                
+                blogPosts.forEach((post, index) => {
+                    const cardEl = document.createElement('div');
+                    cardEl.className = "interactive-glow bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:border-gray-700 transition-all duration-300 cursor-pointer";
                     
-                    const postDate = post.createdAt ? new Date(post.createdAt.toMillis()).toLocaleDateString() : 'Just now';
+                    // Extract plain text preview from markdown
+                    const plainTextPreview = post.content.replace(/[#*`>\-\[\]]/g, '').replace(/\n+/g, ' ').substring(0, 120) + '...';
                     
-                    detailsEl.innerHTML = `
-                        <summary class="p-6 list-none">
-                            <p class="text-sm text-gray-400 mb-2">${postDate}</p>
-                            <h3 class="font-bold text-xl text-white truncate">${post.title}</h3>
-                            <p class="text-gray-300 line-clamp-2 mt-3">${post.content}</p>
-                        </summary>
-                        <div class="details-content border-t border-gray-800">
-                            <p class="text-gray-300 leading-relaxed">${post.content.replace(/\n/g, '<br>')}</p>
+                    cardEl.innerHTML = `
+                        <div class="p-6">
+                            <p class="text-sm text-gray-400 mb-2">${post.date}</p>
+                            <h3 class="font-bold text-xl text-white mb-3">${post.title}</h3>
+                            <p class="text-gray-300 line-clamp-3">${plainTextPreview}</p>
+                            <div class="mt-4 pt-4 border-t border-gray-800">
+                                <span class="inline-flex items-center text-purple-400 text-sm font-medium hover:text-purple-300 transition-colors">
+                                    Read More
+                                    <span class="material-icons-outlined ml-1 text-base">arrow_forward</span>
+                                </span>
+                            </div>
                         </div>
                     `;
-                    container.appendChild(detailsEl);
+                    
+                    cardEl.addEventListener('click', () => openModal(post));
+                    container.appendChild(cardEl);
                 });
+
+                // Re-run the glow effect setup after posts are rendered
                 setupGlowEffect();
-            }, (error) => {
-                console.error("Error fetching blog posts:", error);
-                container.innerHTML = `<p class="text-center col-span-full text-red-400">Error loading blog posts.</p>`;
+            }
+
+            // Modal event listeners
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('blog-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('blog-modal')) {
+                    closeModal();
+                }
             });
-        }
-        
-        document.getElementById('add-post-auth-button').addEventListener('click', () => {
-            const password = prompt("Please enter the password to create a new post:");
-            if (password === BLOG_POST_PASSWORD) {
-                createModal.classList.remove('hidden');
-                setTimeout(() => createModal.classList.remove('opacity-0'), 10);
-            } else if (password) {
-                // Use a custom styled alert or modal in a real app
-                alert("Incorrect password.");
-            }
+            
+            // ESC key to close modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            document.getElementById('mobile-menu-button').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
+            });
+            
+            // Render the posts from the local array
+            renderBlogPosts();
+            
+            // Setup glow effect for static elements
+            setupGlowEffect();
         });
-
-        const closeCreateModal = () => {
-            createModal.classList.add('opacity-0');
-            setTimeout(() => createModal.classList.add('hidden'), 300);
-        };
-
-        document.getElementById('cancel-create-button').addEventListener('click', closeCreateModal);
-        
-        document.getElementById('blog-post-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('post-title').value;
-            const content = document.getElementById('post-content').value;
-
-            try {
-                await addDoc(blogPostsCollection, { title, content, createdAt: serverTimestamp() });
-                e.target.reset();
-                closeCreateModal();
-            } catch (error) {
-                console.error("Error adding document: ", error);
-                alert("Failed to publish post. See console for details.");
-            }
-        });
-
-        document.getElementById('mobile-menu-button').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-        
-        setupGlowEffect();
     </script>
 </body>
 </html>
