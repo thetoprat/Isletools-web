@@ -1,1 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - IsleTools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #000000; color: #EAEAEA; }
+        .nav-link { @apply text-gray-400 hover:text-white transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium; }
+        .btn-primary { @apply bg-white text-black font-bold py-2 px-5 rounded-lg hover:bg-gray-200 transition-all duration-300; }
+        .btn-secondary { @apply bg-transparent border border-gray-700 text-white font-bold py-2 px-5 rounded-lg hover:bg-gray-900 transition-all duration-300; }
+        .modal { @apply fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 transition-opacity duration-300; }
+        .modal-content { @apply bg-gray-900 border border-gray-800 rounded-lg p-8 w-full max-w-2xl shadow-2xl; }
+    </style>
+</head>
+<body>
 
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-sm border-b border-gray-900">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-white font-bold text-xl"><a href="index.html">IsleTools</a></div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="blog.html" class="nav-link text-white">Blog</a>
+                    <a href="bugs.html" class="nav-link">Bugs & Issues</a>
+                    <a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-gray-900 ml-4 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-800 transition">GitHub</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+             <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
+                <a href="index.html" class="block nav-link text-center">Home</a>
+                <a href="blog.html" class="block nav-link text-white text-center">Blog</a>
+                <a href="bugs.html" class="block nav-link text-center">Bugs & Issues</a>
+                <a href="https://github.com/thetoprat/isletools" target="_blank" class="block mt-2 bg-gray-900 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-800 transition text-center">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <div class="flex justify-between items-center mb-12">
+            <h1 class="text-4xl font-bold text-white">Developer Blog</h1>
+            <button id="add-post-auth-button" class="btn-primary">New Post</button>
+        </div>
+        <div id="blog-posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <p class="text-center col-span-full text-gray-400">Loading blog posts...</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-900 mt-20">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-500">
+            <p>&copy; 2024 IsleTools. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Blog Post Modal -->
+    <div id="blog-post-modal" class="modal hidden opacity-0">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold text-white mb-6">Create New Blog Post</h3>
+            <form id="blog-post-form">
+                <div class="mb-4">
+                    <label for="post-title" class="block text-gray-300 mb-2">Title</label>
+                    <input type="text" id="post-title" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none" required>
+                </div>
+                <div class="mb-6">
+                    <label for="post-content" class="block text-gray-300 mb-2">Content</label>
+                    <textarea id="post-content" rows="8" class="w-full bg-black border border-gray-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none" required></textarea>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancel-post-button" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Publish Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const BLOG_POST_PASSWORD = "admin";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        let db, auth, blogPostsCollection;
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            blogPostsCollection = collection(db, `/artifacts/${appId}/public/data/blogPosts`);
+        } catch (e) {
+            console.error("Firebase initialization failed:", e);
+            document.getElementById('blog-posts-container').innerHTML = `<p class="text-center col-span-full text-red-400">Could not connect to the blog service.</p>`;
+        }
+        
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                listenForBlogPosts();
+            } else {
+                const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                const promise = token ? signInWithCustomToken(auth, token) : signInAnonymously(auth);
+                promise.catch(error => console.error("Sign-in failed:", error));
+            }
+        });
+
+        function listenForBlogPosts() {
+            const container = document.getElementById('blog-posts-container');
+            const q = query(blogPostsCollection, orderBy("createdAt", "desc"));
+
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="text-center col-span-full text-gray-400">No blog posts yet. Be the first to write one!</p>';
+                    return;
+                }
+                container.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const post = doc.data();
+                    const postEl = document.createElement('div');
+                    postEl.className = "bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:border-gray-700 transition-all duration-300";
+                    const postDate = post.createdAt ? new Date(post.createdAt.toMillis()).toLocaleDateString() : 'Just now';
+                    const contentHtml = post.content.replace(/\n/g, '<br>');
+
+                    postEl.innerHTML = `
+                        <div class="p-6">
+                            <p class="text-sm text-gray-400 mb-2">${postDate}</p>
+                            <h3 class="font-bold text-xl text-white mb-3">${post.title}</h3>
+                            <p class="text-gray-300 line-clamp-3">${contentHtml}</p>
+                        </div>
+                    `;
+                    container.appendChild(postEl);
+                });
+            }, (error) => {
+                console.error("Error fetching blog posts:", error);
+                container.innerHTML = `<p class="text-center col-span-full text-red-400">Error loading blog posts.</p>`;
+            });
+        }
+        
+        const modal = document.getElementById('blog-post-modal');
+        const authButton = document.getElementById('add-post-auth-button');
+        const cancelButton = document.getElementById('cancel-post-button');
+        const form = document.getElementById('blog-post-form');
+
+        authButton.addEventListener('click', () => {
+            const password = prompt("Please enter the password to create a new post:");
+            if (password === BLOG_POST_PASSWORD) {
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            } else if (password) {
+                alert("Incorrect password.");
+            }
+        });
+
+        const closeModal = () => {
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        cancelButton.addEventListener('click', closeModal);
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+
+            try {
+                await addDoc(blogPostsCollection, {
+                    title: title,
+                    content: content,
+                    createdAt: serverTimestamp()
+                });
+                form.reset();
+                closeModal();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Failed to publish post. See console for details.");
+            }
+        });
+
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
