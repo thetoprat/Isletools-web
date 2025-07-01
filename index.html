@@ -10,25 +10,13 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #000000;
-            background-image: radial-gradient(circle at top, hsl(214, 20%, 12%), #000 60%);
+            background-image: radial-gradient(circle at top, hsl(0, 0%, 8%), #000 60%);
             color: #EAEAEA;
-        }
-        .nav-link {
-            @apply text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium;
-        }
-        .nav-active {
-            @apply bg-gray-800 text-white;
         }
         .gradient-text {
             background: -webkit-linear-gradient(45deg, #A855F7, #EC4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-        .btn-primary { 
-            @apply bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300 shadow-lg;
-        }
-        .btn-secondary { 
-            @apply bg-transparent border border-gray-800 text-gray-300 font-semibold py-2 px-5 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 shadow-lg;
         }
         .section-container {
             border-top: 1px solid #222;
@@ -44,9 +32,9 @@
                 <div class="flex items-center justify-between">
                     <div class="text-white font-bold text-xl ml-2"><a href="index.html">IsleTools</a></div>
                     <div class="hidden md:flex items-center space-x-2 bg-gray-900/80 border border-gray-700 rounded-full p-1">
-                        <a href="index.html" class="nav-link nav-active">Home</a>
-                        <a href="blog.html" class="nav-link">Blog</a>
-                        <a href="bugs.html" class="nav-link">Bugs & Issues</a>
+                        <a href="index.html" class="bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium">Home</a>
+                        <a href="blog.html" class="text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium">Blog</a>
+                        <a href="bugs.html" class="text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium">Bugs & Issues</a>
                     </div>
                     <div class="hidden md:block">
                          <a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-gray-800 px-4 py-2 rounded-full text-sm font-medium text-white hover:bg-gray-700 transition-colors">GitHub</a>
@@ -60,9 +48,9 @@
             </nav>
         </header>
          <div id="mobile-menu" class="hidden md:hidden mt-2 bg-gray-900/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-4 space-y-2">
-            <a href="index.html" class="block nav-link nav-active text-center">Home</a>
-            <a href="blog.html" class="block nav-link text-center">Blog</a>
-            <a href="bugs.html" class="block nav-link text-center">Bugs & Issues</a>
+            <a href="index.html" class="block bg-gray-800 text-white transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium text-center">Home</a>
+            <a href="blog.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium text-center">Blog</a>
+            <a href="bugs.html" class="block text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium text-center">Bugs & Issues</a>
             <a href="https://github.com/thetoprat/isletools" target="_blank" class="block mt-2 bg-gray-800 px-4 py-2 rounded-lg text-sm font-medium text-white hover:bg-gray-700 transition text-center">GitHub</a>
         </div>
     </div>
@@ -77,8 +65,8 @@
                 IsleTools adds a super visual RCON Client, .sav file editor, and more in the future.
             </p>
             <div class="flex justify-center items-center space-x-4">
-                <a href="https://github.com/thetoprat/isletools/releases/latest" target="_blank" class="btn-primary">Download Latest</a>
-                <a href="https://github.com/thetoprat/isletools" target="_blank" class="btn-secondary">View on GitHub</a>
+                <a href="https://github.com/thetoprat/isletools/releases/latest" target="_blank" class="bg-white text-black font-semibold py-2 px-5 rounded-full hover:bg-gray-200 transition-all duration-300 shadow-lg">Download Latest</a>
+                <a href="https://github.com/thetoprat/isletools" target="_blank" class="bg-transparent border border-gray-800 text-gray-300 font-semibold py-2 px-5 rounded-full hover:bg-gray-900 hover:text-white transition-all duration-300 shadow-lg">View on GitHub</a>
             </div>
         </section>
 
@@ -126,7 +114,7 @@
                             <h4 class="font-bold text-xl text-white mb-2">What's New:</h4>
                             <div class="text-gray-300 space-y-2">${releaseNotes}</div>
                             <div class="mt-6 text-center md:text-left">
-                                <a href="${release.html_url}" target="_blank" class="btn-primary inline-block !py-2 !px-4">View Release on GitHub</a>
+                                <a href="${release.html_url}" target="_blank" class="bg-white text-black font-semibold py-2 px-4 rounded-full hover:bg-gray-200 transition-all duration-300 shadow-lg inline-block">View Release on GitHub</a>
                             </div>
                         </div>
                     </div>
